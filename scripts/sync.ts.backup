@@ -180,8 +180,6 @@ async function loadConfig(): Promise<void> {
 const IMAGE_MIMES = new Set([
     'image/jpeg', 'image/png', 'image/webp', 'image/gif',
     'image/tiff', 'image/heic', 'image/heif',
-    'application/illustrator', 'image/vnd.adobe.photoshop',
-    'application/x-indesign', 'application/pdf',
 ]);
 const VIDEO_MIMES = new Set([
     'video/mp4', 'video/quicktime', 'video/x-msvideo',

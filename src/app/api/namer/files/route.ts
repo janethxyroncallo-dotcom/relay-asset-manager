@@ -87,7 +87,7 @@ export async function POST(request: NextRequest) {
 
             // Filter for photos and videos only
             for (const f of data.files || []) {
-                if (f.mimeType?.startsWith('image/') || f.mimeType?.startsWith('video/')) {
+                if (f.mimeType?.startsWith('image/') || f.mimeType?.startsWith('video/') || f.mimeType === 'application/illustrator' || f.mimeType === 'image/vnd.adobe.photoshop' || f.mimeType === 'application/x-indesign' || f.mimeType === 'application/pdf') {
                     files.push({
                         id: f.id,
                         name: f.name,
