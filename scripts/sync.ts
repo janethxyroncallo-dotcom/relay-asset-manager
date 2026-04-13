@@ -1559,7 +1559,13 @@ async function reEmbedChanged(
             batch.map(async (asset) => {
                 // Build text part
                 const textParts: string[] = [];
-                const baseName = asset.name.replace(/\.[^.]+$/, '').replace(/_/g, ' ');
+                const baseName = asset.name
+                    .replace(/\.[^.]+$/, '')
+                    .replace(/([a-z])([A-Z])/g, '$1 $2')
+                    .replace(/[-_]/g, ' ')
+                    .replace(/(\d+)x(\d+)/g, '$1x$2 pixels')
+                    .replace(/(\d+)dpi/gi, '$1 dpi')
+                    .toLowerCase();
                 textParts.push(baseName);
                 if (asset.parsed_shoot_description) textParts.push(asset.parsed_shoot_description);
                 if (asset.parsed_creator) textParts.push(`by ${asset.parsed_creator}`);
