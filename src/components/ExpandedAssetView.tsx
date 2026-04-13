@@ -331,7 +331,8 @@ export default function ExpandedAssetView({
                                         height={asset.height}
                                         className={`object-contain rounded-lg ${isLandscape ? 'w-full' : 'h-full'}`}
                                         style={{ maxHeight: '60vh' }}
-                                        priority
+                                        unoptimized
+                                    priority
                                     />
                                     <div className="absolute inset-0 flex items-center justify-center">
                                         {wantPlay ? (
@@ -370,6 +371,7 @@ export default function ExpandedAssetView({
                                 height={asset.height}
                                 className={`object-contain rounded-lg ${isLandscape ? 'w-full' : 'h-full'}`}
                                 style={{ maxHeight: '60vh' }}
+                                unoptimized
                                 priority
                             />
                         )}

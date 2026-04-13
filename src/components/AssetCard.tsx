@@ -120,6 +120,7 @@ const AssetCard = memo(function AssetCard({ asset, selected, isExpired, similari
                 className="w-full h-auto block"
                 sizes="(max-width: 480px) 100vw, (max-width: 768px) 50vw, (max-width: 1280px) 33vw, 25vw"
                 loading="lazy"
+                unoptimized
             />
 
             {/* Video indicator */}
