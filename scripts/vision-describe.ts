@@ -22,7 +22,7 @@ const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY!;
 
 const GEMINI_VISION_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
-const DAILY_LIMIT = 1;
+const DAILY_LIMIT = 20;
 const REQUEST_DELAY_MS = 4500;
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
