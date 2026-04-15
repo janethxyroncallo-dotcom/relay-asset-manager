@@ -21,7 +21,7 @@ const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY!;
 
-const GEMINI_VISION_URL = 'https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash-lite:generateContent';
+const GEMINI_VISION_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
 const DAILY_LIMIT = 1;
 const REQUEST_DELAY_MS = 4500;
 
@@ -34,19 +34,39 @@ function log(msg: string) {
 }
 
 async function describeImage(base64: string, mimeType: string, assetName: string): Promise<string | null> {
-    const prompt = `You are analyzing a product image for Kitsch, a beauty and hair care brand.
+    const prompt = `You are a creative asset librarian for Kitsch, a beauty and hair care brand. Your job is to generate rich, detailed search descriptions by combining visual analysis of the image with context extracted from the filename.
 
-Describe this image concisely for search indexing. Include:
-- Product type (hair towel, shampoo bottle, conditioner, scrunchie, shower cap, etc.)
-- Colors (packaging color, background color, accent colors)
-- Shot type (lifestyle photo, product shot, flat lay, detail shot, group shot, infographic)
-- If a model appears: hair color, skin tone, expression, pose
-- Background (white, beige, warm, gradient, studio, etc.)
-- Lighting mood (bright, soft, warm, clean, etc.)
-- Orientation (portrait, landscape, square)
-- Notable visual elements (texture, pattern, multiple products, ingredients shown)
+FILENAME CONTEXT (extract what you can):
+Filename: ${assetName}
+- Extract any SKU numbers (sequences of 4-5 digits)
+- Extract product name by splitting CamelCase and hyphens into readable words
+- Extract dimensions if present (e.g. 1280x1280, 2000x2000)
+- Extract resolution if present (e.g. 72dpi, 300dpi)
+- Extract any variant codes (e.g. Opt1, Opt2, A, B)
 
-Write as comma-separated descriptive terms under 80 words. Do not include SKU numbers or file names.`;
+VISUAL ANALYSIS (analyze the image carefully):
+- PRODUCT: What exact Kitsch product is shown? Be specific (e.g. solid coconut oil shampoo bar, microfiber leopard print hair towel, luxe shower cap with stripe pattern)
+- ASSET TYPE: lifestyle photo, ecomm product shot, flat lay, group shot, infographic, packaging design, CAD drawing, tech pack, certificate, social media graphic, hero shot
+- PACKAGING COLOR: What color is the packaging or product? Be specific (e.g. terracotta orange, sage green, cream white, dusty pink, navy blue, warm beige)
+- BACKGROUND: Describe background precisely (e.g. clean white studio, warm cream gradient, soft beige, lifestyle bathroom setting, outdoor natural)
+- DOMINANT COLORS: List the 3-5 most prominent colors in the entire image
+- MODEL: If a model appears — describe hair type (straight, curly, wavy), hair color, skin tone, expression, pose, body part shown. If no model, write "no model"
+- INGREDIENTS: If any ingredients are visible on packaging, list them (e.g. coconut oil, rosemary, biotin, rice water, shea butter)
+- CERTIFICATIONS: Any visible certifications or badges (e.g. Leaping Bunny, cruelty free, vegan, CA Right to Know)
+- COMPOSITION: portrait, landscape, square, overhead flat lay, 45 degree angle, hero shot, multiple products, single product
+- MOOD: clean and minimal, warm and cozy, bright editorial, soft natural light, dramatic, playful, professional
+- ADDITIONAL ELEMENTS: any props, accessories, or notable visual details (e.g. water droplets, hair tools, bathroom accessories, flowers, towels)
+
+OUTPUT FORMAT:
+Write a single detailed paragraph of 150-200 words that naturally incorporates all the above information. Start with the SKU and product name, then describe what you see visually. Write in a way that would help someone find this image by searching for any of its visual or product characteristics.editorial, soft natural light, dramatic, playful)
+
+MODEL: If a model appears, describe hair type, hair color, skin tone, expression, and pose. If no model, say "no model".
+
+COMPOSITION: Describe the layout (e.g. portrait, landscape, square, overhead flat lay, 45 degree angle, hero shot, multiple products arranged)
+
+NOTABLE DETAILS: Any other searchable details (e.g. ingredients shown, certifications visible, price callouts, color swatches, product in use, wet hair, outdoor setting)
+
+Write a detailed paragraph of 100-150 words covering all the above. Be specific and descriptive. Do not include SKU numbers or file names.`;
 
     try {
         const res = await fetch(`${GEMINI_VISION_URL}?key=${GEMINI_API_KEY}`, {
@@ -59,7 +79,7 @@ Write as comma-separated descriptive terms under 80 words. Do not include SKU nu
                         { text: prompt }
                     ]
                 }],
-                generationConfig: { maxOutputTokens: 150, temperature: 0.2 }
+                generationConfig: { maxOutputTokens: 500, temperature: 0.2 }
             }),
         });
 
