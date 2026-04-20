@@ -37,6 +37,11 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY, {
     },
 });
 
+function log(msg: string) {
+    const ts = new Date().toLocaleTimeString();
+    console.log(`[${ts}] ${msg}`);
+}
+
 async function describeImage(base64: string, mimeType: string, assetName: string): Promise<string | null> {
     const prompt = `You are a creative asset librarian for Kitsch, a beauty and hair care brand. Your job is to generate rich, detailed search descriptions by combining visual analysis of the image with context extracted from the filename.
 
