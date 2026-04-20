@@ -69,15 +69,7 @@ VISUAL ANALYSIS (analyze the image carefully):
 - ADDITIONAL ELEMENTS: any props, accessories, or notable visual details (e.g. water droplets, hair tools, bathroom accessories, flowers, towels)
 
 OUTPUT FORMAT:
-Write a single detailed paragraph of 150-200 words that naturally incorporates all the above information. Start with the SKU and product name, then describe what you see visually. Write in a way that would help someone find this image by searching for any of its visual or product characteristics.editorial, soft natural light, dramatic, playful)
-
-MODEL: If a model appears, describe hair type, hair color, skin tone, expression, and pose. If no model, say "no model".
-
-COMPOSITION: Describe the layout (e.g. portrait, landscape, square, overhead flat lay, 45 degree angle, hero shot, multiple products arranged)
-
-NOTABLE DETAILS: Any other searchable details (e.g. ingredients shown, certifications visible, price callouts, color swatches, product in use, wet hair, outdoor setting)
-
-Write a detailed paragraph of 100-150 words covering all the above. Be specific and descriptive. Do not include SKU numbers or file names.`;
+Write a single detailed paragraph of 150-200 words that naturally incorporates all the above information. Start with the SKU and product name, then describe what you see visually. Write in a way that would help someone find this image by searching for any of its visual or product characteristics.`;
 
     try {
         const res = await fetch(`${GEMINI_VISION_URL}?key=${GEMINI_API_KEY}`, {
