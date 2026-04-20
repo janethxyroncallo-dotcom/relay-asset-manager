@@ -37,6 +37,8 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY, {
     },
 });
 
+const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
+
 function log(msg: string) {
     const ts = new Date().toLocaleTimeString();
     console.log(`[${ts}] ${msg}`);
