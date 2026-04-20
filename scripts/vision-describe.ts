@@ -25,13 +25,17 @@ const GEMINI_VISION_URL = 'https://generativelanguage.googleapis.com/v1beta/mode
 const DAILY_LIMIT = 20;
 const REQUEST_DELAY_MS = 4500;
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
-const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
-
-function log(msg: string) {
-    const ts = new Date().toLocaleTimeString();
-    console.log(`[${ts}] ${msg}`);
-}
+const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY, {
+    auth: {
+        autoRefreshToken: false,
+        persistSession: false,
+    },
+    global: {
+        headers: {
+            Authorization: `Bearer ${SUPABASE_SERVICE_KEY}`,
+        },
+    },
+});
 
 async function describeImage(base64: string, mimeType: string, assetName: string): Promise<string | null> {
     const prompt = `You are a creative asset librarian for Kitsch, a beauty and hair care brand. Your job is to generate rich, detailed search descriptions by combining visual analysis of the image with context extracted from the filename.
