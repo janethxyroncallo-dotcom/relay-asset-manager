@@ -13,6 +13,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { createClient as createServerClient } from '@/lib/supabase/server';
 import type { NamerSettings, NamingSchemas, Dropdowns, AISettings } from '@/lib/namer/types';
+import { requireRole } from '@/lib/auth/requireRole';
 
 const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
