@@ -12,10 +12,8 @@ export async function GET(request: Request) {
     const error = searchParams.get('error');
     const errorDescription = searchParams.get('error_description');
     const nextParam = searchParams.get('next') ?? '/';
-    // Prevent open redirect — only allow relative paths
     const next = (!nextParam.startsWith('/') || nextParam.startsWith('//') || nextParam.includes('://')) ? '/' : nextParam;
 
-    // Handle error redirects from Supabase
     if (error) {
         logger.error('auth', 'Supabase auth error', { error, errorDescription });
         const loginUrl = new URL('/login', origin);
@@ -28,16 +26,20 @@ export async function GET(request: Request) {
         const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
 
         if (!exchangeError) {
-    // Restrict access to @mykitsch.com emails only
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user?.email?.endsWith('@mykitsch.com')) {
-        await supabase.auth.signOut();
-        const loginUrl = new URL('/login', origin);
-        loginUrl.searchParams.set('error', 'Access restricted to Kitsch team members only.');
-        return NextResponse.redirect(loginUrl.toString());
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user?.email?.endsWith('@mykitsch.com')) {
+                await supabase.auth.signOut();
+                const loginUrl = new URL('/login', origin);
+                loginUrl.searchParams.set('error', 'Access restricted to Kitsch team members only.');
+                return NextResponse.redirect(loginUrl.toString());
+            }
+
+            logger.info('auth', 'Session exchange successful', { redirect: next });
+            return NextResponse.redirect(`${origin}${next}`);
+        }
+
+        logger.error('auth', 'exchangeCodeForSession failed', { error: exchangeError.message });
     }
 
-    logger.info('auth', 'Session exchange successful', { redirect: next });
-    return NextResponse.redirect(`${origin}${next}`);
+    return NextResponse.redirect(`${origin}/login?error=auth_failed`);
 }
-
