@@ -28,14 +28,16 @@ export async function GET(request: Request) {
         const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
 
         if (!exchangeError) {
-            logger.info('auth', 'Session exchange successful', { redirect: next });
-            return NextResponse.redirect(`${origin}${next}`);
-        }
-
-        logger.error('auth', 'exchangeCodeForSession failed', { error: exchangeError.message });
+    // Restrict access to @mykitsch.com emails only
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user?.email?.endsWith('@mykitsch.com')) {
+        await supabase.auth.signOut();
+        const loginUrl = new URL('/login', origin);
+        loginUrl.searchParams.set('error', 'Access restricted to Kitsch team members only.');
+        return NextResponse.redirect(loginUrl.toString());
     }
 
-    // If we get here, something went wrong — redirect to login with error
-    return NextResponse.redirect(`${origin}/login?error=auth_failed`);
+    logger.info('auth', 'Session exchange successful', { redirect: next });
+    return NextResponse.redirect(`${origin}${next}`);
 }
 
