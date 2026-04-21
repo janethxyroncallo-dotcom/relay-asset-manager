@@ -1,6 +1,6 @@
 // Core types for Relay Asset Manager
 
-export type AssetType = 'photo' | 'video';
+export type AssetType = 'photo' | 'video' | 'design';
 
 export type RightsStatus = 'unlimited' | 'limited' | 'expired' | null;
 

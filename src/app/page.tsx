@@ -33,7 +33,7 @@ const DEFAULT_FILTERS: SearchFilters = {
 // Only folder, sort (newest/oldest), assetType, and orientation are
 // encoded in the URL. Everything else stays at app defaults.
 const SHAREABLE_SORTS = new Set(['newest', 'oldest']);
-const SHAREABLE_TYPES = new Set(['photo', 'video', 'all']);
+const SHAREABLE_TYPES = new Set(['photo', 'video', 'design', 'all']);
 const SHAREABLE_ORIENTATIONS = new Set(['all', 'landscape', 'portrait', 'square']);
 
 function filtersFromUrl(): Partial<SearchFilters> {

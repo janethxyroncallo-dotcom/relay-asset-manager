@@ -183,6 +183,10 @@ const IMAGE_MIMES = new Set([
     'application/illustrator', 'image/vnd.adobe.photoshop',
     'application/x-indesign', 'application/pdf',
 ]);
+const DESIGN_MIMES = new Set([
+    'application/illustrator', 'image/vnd.adobe.photoshop',
+    'application/x-indesign', 'application/pdf',
+]);
 const VIDEO_MIMES = new Set([
     'video/mp4', 'video/quicktime', 'video/x-msvideo',
     'video/x-matroska', 'video/webm', 'video/mpeg',
@@ -437,7 +441,7 @@ interface DriveFile {
     width: number;
     height: number;
     duration: number | null;
-    assetType: 'photo' | 'video';
+    assetType: 'photo' | 'video' | 'design';
     createdTime: string;
     modifiedTime: string;
     fileSize: number | null;
@@ -625,7 +629,7 @@ async function crawlDrive(accessToken: string, folderTree: FolderTree): Promise<
                 width,
                 height,
                 duration,
-                assetType: isVideo ? 'video' : 'photo',
+                assetType: isVideo ? 'video' : DESIGN_MIMES.has(file.mimeType) ? 'design' : 'photo',
                 createdTime: (file as any).createdTime ?? new Date().toISOString(),
                 modifiedTime: (file as any).modifiedTime ?? new Date().toISOString(),
                 fileSize: (file as any).size ? Number((file as any).size) : null,

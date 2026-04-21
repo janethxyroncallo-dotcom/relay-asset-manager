@@ -121,6 +121,7 @@ export default function SearchBar({ filters, onFiltersChange, onSearchSubmit, is
                         { value: 'all', label: 'All Types' },
                         { value: 'photo', label: 'Photos' },
                         { value: 'video', label: 'Videos' },
+                        { value: 'design', label: 'Design Files' },
                     ]}
                 />
 
