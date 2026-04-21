@@ -16,6 +16,7 @@ import FolderPickerModal, { type RecentFolder } from '@/components/FolderPickerM
 import DownloadQueue, { useDownloadQueue } from '@/components/DownloadQueue';
 import RelayHistory, { useRelayHistory } from '@/components/RelayHistory';
 import NamerView from '@/components/namer/NamerView';
+import { useUserRole } from '@/hooks/useUserRole';
 
 const PAGE_SIZE = 48;
 
@@ -179,6 +180,9 @@ function Home() {
 
   // Relay history
   const relayHistory = useRelayHistory();
+
+  // User role
+  const { canAccessNamer, canAccessSettings } = useUserRole();
 
 
 
@@ -841,17 +845,19 @@ function Home() {
             >
               📂 Library
             </button>
-            <button
-              onClick={() => setAppMode('ingest')}
-              className="text-xs font-semibold px-4 py-1.5 rounded-md transition-all"
-              style={{
-                background: appMode === 'ingest' ? 'var(--ram-bg-elevated)' : 'transparent',
-                color: appMode === 'ingest' ? 'var(--ram-accent)' : 'var(--ram-text-tertiary)',
-                boxShadow: appMode === 'ingest' ? '0 1px 3px rgba(0,0,0,0.2)' : 'none',
-              }}
-            >
-              🏷️ Namer
-            </button>
+            {canAccessNamer && (
+  <button
+    onClick={() => setAppMode('ingest')}
+    className="text-xs font-semibold px-4 py-1.5 rounded-md transition-all"
+    style={{
+      background: appMode === 'ingest' ? 'var(--ram-bg-elevated)' : 'transparent',
+      color: appMode === 'ingest' ? 'var(--ram-accent)' : 'var(--ram-text-tertiary)',
+      boxShadow: appMode === 'ingest' ? '0 1px 3px rgba(0,0,0,0.2)' : 'none',
+    }}
+  >
+    🏷️ Namer
+  </button>
+)}
           </div>
 
           {/* User menu dropdown */}
