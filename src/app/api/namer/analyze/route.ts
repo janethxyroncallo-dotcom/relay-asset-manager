@@ -16,6 +16,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getDriveAccessToken } from '@/lib/google/auth';
 import { createClient as createServerClient } from '@/lib/supabase/server';
 import { logger } from '@/lib/logger';
+import { requireRole } from '@/lib/auth/requireRole';
 import type { AIMetadata } from '@/lib/namer/types';
 import sharp from 'sharp';
 
@@ -106,6 +107,9 @@ export async function POST(request: NextRequest) {
     if (!user) {
         return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
     }
+
+    const roleError = await requireRole(['admin', 'editor']);
+    if (roleError) return roleError;
 
     if (!GEMINI_API_KEY) {
         return NextResponse.json({ error: 'Gemini API key not configured' }, { status: 500 });

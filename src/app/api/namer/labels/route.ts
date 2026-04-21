@@ -16,6 +16,7 @@ import { NextResponse } from 'next/server';
 import { getDriveAccessToken } from '@/lib/google/auth';
 import { createClient as createServerClient } from '@/lib/supabase/server';
 import { logger } from '@/lib/logger';
+import { requireRole } from '@/lib/auth/requireRole';
 import { getConfig } from '@/lib/config';
 
 const LABELS_API = 'https://drivelabels.googleapis.com/v2/labels';
@@ -26,6 +27,9 @@ export async function GET() {
     if (!user) {
         return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
     }
+
+    const roleError = await requireRole(['admin', 'editor']);
+    if (roleError) return roleError;
 
     try {
         const token = await getDriveAccessToken();

@@ -129,6 +129,9 @@ export async function GET() {
         return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
     }
 
+    const roleError = await requireRole(['admin', 'editor']);
+    if (roleError) return roleError;
+
     try {
         const [schemas, dropdowns, aiSettings, helpGuide] = await Promise.all([
             getSetting<NamingSchemas>('namer_schemas', DEFAULT_SCHEMAS),

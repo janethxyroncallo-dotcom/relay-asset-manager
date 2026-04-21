@@ -10,6 +10,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getDriveAccessToken } from '@/lib/google/auth';
 import { createClient as createServerClient } from '@/lib/supabase/server';
 import { logger } from '@/lib/logger';
+import { requireRole } from '@/lib/auth/requireRole';
 
 const DRIVE_API = 'https://www.googleapis.com/drive/v3';
 
@@ -19,6 +20,9 @@ export async function POST(request: NextRequest) {
     if (!user) {
         return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
     }
+
+    const roleError = await requireRole(['admin', 'editor']);
+    if (roleError) return roleError;
 
     try {
         const { fileId, description } = await request.json();

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
+import UserRolesPanel from '@/components/UserRolesPanel';
 
 interface SyncLog {
     id: string;
@@ -1322,7 +1323,11 @@ export default function SettingsPanel({ onClose, onSyncComplete }: { onClose: ()
                             )}
                         </div>
                     </div>
-                )}
+              )}
+            </div>
+            {/* Team Access */}
+            <div style={{ borderTop: '1px solid var(--ram-border)', marginTop: 8 }}>
+                <UserRolesPanel />
             </div>
         </div>
     );
