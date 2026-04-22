@@ -82,7 +82,7 @@ Write a single detailed paragraph of 150-200 words that naturally incorporates a
                         { text: prompt }
                     ]
                 }],
-                generationConfig: { maxOutputTokens: 500, temperature: 0.2 }
+                generationConfig: { maxOutputTokens: 1200, temperature: 0.2 }
             }),
         });
 
